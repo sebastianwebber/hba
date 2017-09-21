@@ -13,3 +13,16 @@ And (for now) have a ruby gem dependency:
 ```bash
 gem install fpm
 ```
+
+### osx related dependecies:
+
+```bash
+brew install rpm
+```
+> More details here: http://timperrett.com/2014/03/23/enabling-rpmbuild-on-mac-osx/
+
+## How to built it
+
+```bash
+goreleaser --rm-dist
+```
