@@ -17,3 +17,16 @@ archive:
     386: 32-bit
     amd64: 64-bit
     darwin: macOS
+
+fpm:
+  vendor: PostgreSQL Community
+  homepage: https://github.com/sebastianwebber/hba
+
+  maintainer: Sebastian Webber <sebasitan@swebber.me>
+
+  description: A tool to manage the pg_hba.conf
+
+  # Formats to generate as output
+  formats:
+    - deb
+    - rpm
