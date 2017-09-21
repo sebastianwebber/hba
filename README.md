@@ -18,6 +18,7 @@ gem install fpm
 
 ```bash
 brew install rpm
+brew install dpkg
 ```
 > More details here: http://timperrett.com/2014/03/23/enabling-rpmbuild-on-mac-osx/
 

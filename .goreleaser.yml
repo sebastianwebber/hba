@@ -29,3 +29,4 @@ fpm:
   # Formats to generate as output
   formats:
     - rpm
+    - deb
