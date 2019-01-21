@@ -31,6 +31,12 @@ func Test_parseLine(t *testing.T) {
 			want:    HbaRule{Type: "host", DatabaseName: "all", UserName: "all", IPAddress: "127.0.0.1", NetworkMask: "255.255.255.0", AuthMethod: "trust"},
 			wantErr: false,
 		},
+		{
+			name:    "should parse a host line (dns addressses)",
+			args:    "host    all             all             super-site.com            trust",
+			want:    HbaRule{Type: "host", DatabaseName: "all", UserName: "all", DNSAddress: "super-site.com", AuthMethod: "trust"},
+			wantErr: false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

@@ -5,6 +5,7 @@ type HbaRule struct {
 	Type         string
 	DatabaseName string
 	UserName     string
+	DNSAddress   string
 	IPAddress    string
 	NetworkMask  string
 	AuthMethod   string

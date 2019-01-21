@@ -38,16 +38,11 @@ func parseLocal(parts []string) *HbaRule {
 func parseHost(parts []string) *HbaRule {
 
 	if len(parts) == 5 {
-		ipParts := strings.Split(parts[3], "/")
-
-		return &HbaRule{
-			Type:         parts[0],
-			DatabaseName: parts[1],
-			UserName:     parts[2],
-			IPAddress:    ipParts[0],
-			NetworkMask:  ipParts[1],
-			AuthMethod:   parts[4],
+		if strings.Contains(parts[3], "/") {
+			return parseHostOctet(parts)
 		}
+
+		return parseHostDNS(parts)
 	}
 
 	return &HbaRule{
@@ -57,6 +52,29 @@ func parseHost(parts []string) *HbaRule {
 		IPAddress:    parts[3],
 		NetworkMask:  parts[4],
 		AuthMethod:   parts[5],
+	}
+}
+
+func parseHostOctet(parts []string) *HbaRule {
+	ipParts := strings.Split(parts[3], "/")
+
+	return &HbaRule{
+		Type:         parts[0],
+		DatabaseName: parts[1],
+		UserName:     parts[2],
+		IPAddress:    ipParts[0],
+		NetworkMask:  ipParts[1],
+		AuthMethod:   parts[4],
+	}
+}
+
+func parseHostDNS(parts []string) *HbaRule {
+	return &HbaRule{
+		Type:         parts[0],
+		DatabaseName: parts[1],
+		UserName:     parts[2],
+		DNSAddress:   parts[3],
+		AuthMethod:   parts[4],
 	}
 }
 
