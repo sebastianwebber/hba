@@ -32,9 +32,23 @@ func formatRule(rule *HbaRule) string {
 		return formatLocal(*rule)
 	}
 
-	return ""
+	return formatHost(*rule)
 }
 
 func formatLocal(r HbaRule) string {
 	return fmt.Sprintf("%s\t%s\t%s\t%s", r.Type, r.DatabaseName, r.UserName, r.AuthMethod)
+}
+
+func formatHost(r HbaRule) string {
+
+	octMask, _ := r.NetworkMask.Size()
+
+	return fmt.Sprintf(
+		"%s\t%s\t%s\t%s/%d\t%s",
+		r.Type,
+		r.DatabaseName,
+		r.UserName,
+		r.IPAddress.String(),
+		octMask,
+		r.AuthMethod)
 }

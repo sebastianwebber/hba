@@ -14,8 +14,6 @@ func parseIPMask(s string) *net.IPMask {
 
 func Test_parseLine(t *testing.T) {
 
-	ip, netmask, _ := net.ParseCIDR("127.0.0.1/32")
-
 	tests := []struct {
 		name    string
 		args    string
@@ -30,8 +28,8 @@ func Test_parseLine(t *testing.T) {
 		},
 		{
 			name:    "should parse a host line (ip/octet)",
-			args:    "host    all             all             127.0.0.1/32            trust",
-			want:    HbaRule{Type: "host", DatabaseName: "all", UserName: "all", IPAddress: ip, NetworkMask: &netmask.Mask, AuthMethod: "trust"},
+			args:    hostRuleCIDRStr,
+			want:    hostRuleCIDR,
 			wantErr: false,
 		},
 		{
