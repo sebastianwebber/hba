@@ -34,8 +34,8 @@ func Test_parseLine(t *testing.T) {
 		},
 		{
 			name:    "should parse a host line (ip regular_mask)",
-			args:    "host    all             all             127.0.0.1 255.255.255.0            trust",
-			want:    HbaRule{Type: "host", DatabaseName: "all", UserName: "all", IPAddress: ip, NetworkMask: parseIPMask("255.255.255.0"), AuthMethod: "trust"},
+			args:    "host    all             all             192.168.150.0 255.255.252.0            trust",
+			want:    HbaRule{Type: "host", DatabaseName: "all", UserName: "all", IPAddress: ip, NetworkMask: parseIPMask("255.255.252.0"), AuthMethod: "trust"},
 			wantErr: false,
 		},
 		{
