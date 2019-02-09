@@ -3,6 +3,7 @@ package lib
 import (
 	"errors"
 	"fmt"
+	"net"
 	"strings"
 )
 
@@ -45,25 +46,28 @@ func parseHost(parts []string) *HbaRule {
 		return parseHostDNS(parts)
 	}
 
+	mask := net.IPMask(net.ParseIP(parts[4]))
+
 	return &HbaRule{
 		Type:         parts[0],
 		DatabaseName: parts[1],
 		UserName:     parts[2],
-		IPAddress:    parts[3],
-		NetworkMask:  parts[4],
+		IPAddress:    net.ParseIP(parts[3]),
+		NetworkMask:  &mask,
 		AuthMethod:   parts[5],
 	}
 }
 
 func parseHostOctet(parts []string) *HbaRule {
-	ipParts := strings.Split(parts[3], "/")
+
+	addr, mask, _ := net.ParseCIDR(parts[3])
 
 	return &HbaRule{
 		Type:         parts[0],
 		DatabaseName: parts[1],
 		UserName:     parts[2],
-		IPAddress:    ipParts[0],
-		NetworkMask:  ipParts[1],
+		IPAddress:    addr,
+		NetworkMask:  &mask.Mask,
 		AuthMethod:   parts[4],
 	}
 }

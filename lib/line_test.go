@@ -1,11 +1,20 @@
 package lib
 
 import (
+	"net"
 	"reflect"
 	"testing"
 )
 
+func parseIPMask(s string) *net.IPMask {
+
+	mask := net.IPMask(net.ParseIP(s))
+	return &mask
+}
+
 func Test_parseLine(t *testing.T) {
+
+	ip, netmask, _ := net.ParseCIDR("127.0.0.1/32")
 
 	tests := []struct {
 		name    string
@@ -22,13 +31,13 @@ func Test_parseLine(t *testing.T) {
 		{
 			name:    "should parse a host line (ip/octet)",
 			args:    "host    all             all             127.0.0.1/32            trust",
-			want:    HbaRule{Type: "host", DatabaseName: "all", UserName: "all", IPAddress: "127.0.0.1", NetworkMask: "32", AuthMethod: "trust"},
+			want:    HbaRule{Type: "host", DatabaseName: "all", UserName: "all", IPAddress: ip, NetworkMask: &netmask.Mask, AuthMethod: "trust"},
 			wantErr: false,
 		},
 		{
 			name:    "should parse a host line (ip regular_mask)",
 			args:    "host    all             all             127.0.0.1 255.255.255.0            trust",
-			want:    HbaRule{Type: "host", DatabaseName: "all", UserName: "all", IPAddress: "127.0.0.1", NetworkMask: "255.255.255.0", AuthMethod: "trust"},
+			want:    HbaRule{Type: "host", DatabaseName: "all", UserName: "all", IPAddress: ip, NetworkMask: parseIPMask("255.255.255.0"), AuthMethod: "trust"},
 			wantErr: false,
 		},
 		{
