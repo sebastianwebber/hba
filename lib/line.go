@@ -22,14 +22,11 @@ func parseLine(line string) (*HbaRule, error) {
 	}
 	ruleType := strings.ToLower(parts[0])
 
-	switch ruleType {
-	case "local":
+	if ruleType == "local" {
 		return parseLocal(parts), nil
-	case "host":
-		return parseHost(parts), nil
 	}
 
-	return nil, nil
+	return parseHost(parts), nil
 }
 
 func parseLocal(parts []string) *HbaRule {
