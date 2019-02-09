@@ -40,8 +40,8 @@ func Test_parseLine(t *testing.T) {
 		},
 		{
 			name:    "should parse a host line (dns addressses)",
-			args:    "host    all             all             super-site.com            trust",
-			want:    HbaRule{Type: "host", DatabaseName: "all", UserName: "all", DNSAddress: "super-site.com", AuthMethod: "trust"},
+			args:    hostRuleDNSStr,
+			want:    hostRuleDNS,
 			wantErr: false,
 		},
 	}
