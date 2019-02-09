@@ -24,8 +24,8 @@ func Test_parseLine(t *testing.T) {
 	}{
 		{
 			name:    "should parse a local line",
-			args:    "local   all             all                                     trust",
-			want:    HbaRule{Type: "local", DatabaseName: "all", UserName: "all", AuthMethod: "trust"},
+			args:    localRuleStr,
+			want:    localRule,
 			wantErr: false,
 		},
 		{
