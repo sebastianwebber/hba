@@ -7,6 +7,11 @@ import (
 	"strings"
 )
 
+// Parse a line from pg_hba.conf file
+func Parse(line string) (*HbaRule, error) {
+	return parseLine(line)
+}
+
 func parseLine(line string) (*HbaRule, error) {
 
 	parts := strings.Fields(line)

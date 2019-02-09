@@ -12,7 +12,7 @@ func parseIPMask(s string) *net.IPMask {
 	return &mask
 }
 
-func Test_parseLine(t *testing.T) {
+func Test_Parse(t *testing.T) {
 
 	tests := []struct {
 		name    string
@@ -47,7 +47,7 @@ func Test_parseLine(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := parseLine(tt.args)
+			got, err := Parse(tt.args)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("parseLine() error = %v, wantErr %v", err, tt.wantErr)
 				return
