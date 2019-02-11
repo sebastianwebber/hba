@@ -2,7 +2,6 @@ package hba
 
 import (
 	"errors"
-	"fmt"
 	"net"
 	"regexp"
 	"strings"
@@ -23,13 +22,6 @@ func Parse(line string) (*HbaRule, error) {
 
 func parseLine(line string) (*HbaRule, error) {
 
-	parts := strings.Fields(line)
-
-	var err error
-	if err = validateLine(parts); err != nil {
-		return nil, fmt.Errorf("could not parse line: %v", err)
-	}
-
 	if strings.HasPrefix(line, "local") {
 		return parseLocal(line)
 	}
@@ -43,6 +35,10 @@ func parseLocal(line string) (*HbaRule, error) {
 
 	matches := reLocal.FindAllStringSubmatch(line, -1)
 
+	if len(matches) == 0 {
+		return nil, errors.New("invalid line")
+	}
+
 	return parseLocalParts(matches[0][1:]), nil
 }
 
@@ -51,6 +47,10 @@ var reHost = regexp.MustCompile(regexHost)
 func parseHost(line string) (*HbaRule, error) {
 
 	matches := reHost.FindAllStringSubmatch(line, -1)
+
+	if len(matches) == 0 {
+		return nil, errors.New("invalid line")
+	}
 
 	return parseHostParts(matches[0][1:]), nil
 }
@@ -112,12 +112,4 @@ func parseHostDNS(parts []string) *HbaRule {
 		AuthMethod:   parts[5],
 		Comments:     parts[6],
 	}
-}
-
-func validateLine(parts []string) error {
-	if len(parts) < 4 {
-		return errors.New("invalid fields length")
-	}
-
-	return nil
 }

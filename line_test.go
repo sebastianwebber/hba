@@ -20,6 +20,18 @@ func Test_Parse(t *testing.T) {
 		wantErr bool
 	}{
 		{
+			name:    "should throw an error on invalid lines - local",
+			args:    "local#############",
+			want:    HbaRule{},
+			wantErr: true,
+		},
+		{
+			name:    "should throw an error on invalid lines - host",
+			args:    "host all md4",
+			want:    HbaRule{},
+			wantErr: true,
+		},
+		{
 			name:    "should parse a local line",
 			args:    localRuleStr,
 			want:    localRule,
@@ -51,8 +63,11 @@ func Test_Parse(t *testing.T) {
 				t.Errorf("parseLine() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if !reflect.DeepEqual(*got, tt.want) {
-				t.Errorf("parseLine() = %v, want %v", got, tt.want)
+
+			if got != nil {
+				if !reflect.DeepEqual(*got, tt.want) {
+					t.Errorf("parseLine() = %v, want %v", got, tt.want)
+				}
 			}
 		})
 	}
