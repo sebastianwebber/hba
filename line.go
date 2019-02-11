@@ -16,11 +16,11 @@ const (
 )
 
 // Parse a line from pg_hba.conf file
-func Parse(line string) (*HbaRule, error) {
+func Parse(line string) (*Rule, error) {
 	return parseLine(line)
 }
 
-func parseLine(line string) (*HbaRule, error) {
+func parseLine(line string) (*Rule, error) {
 
 	if strings.HasPrefix(line, "local") {
 		return parseLocal(line)
@@ -31,7 +31,7 @@ func parseLine(line string) (*HbaRule, error) {
 
 var reLocal = regexp.MustCompile(regexLocal)
 
-func parseLocal(line string) (*HbaRule, error) {
+func parseLocal(line string) (*Rule, error) {
 
 	matches := reLocal.FindAllStringSubmatch(line, -1)
 
@@ -44,7 +44,7 @@ func parseLocal(line string) (*HbaRule, error) {
 
 var reHost = regexp.MustCompile(regexHost)
 
-func parseHost(line string) (*HbaRule, error) {
+func parseHost(line string) (*Rule, error) {
 
 	matches := reHost.FindAllStringSubmatch(line, -1)
 
@@ -55,8 +55,8 @@ func parseHost(line string) (*HbaRule, error) {
 	return parseHostParts(matches[0][1:]), nil
 }
 
-func parseLocalParts(parts []string) *HbaRule {
-	return &HbaRule{
+func parseLocalParts(parts []string) *Rule {
+	return &Rule{
 		Type:         parts[0],
 		DatabaseName: parts[1],
 		UserName:     parts[2],
@@ -65,7 +65,7 @@ func parseLocalParts(parts []string) *HbaRule {
 	}
 }
 
-func parseHostParts(parts []string) *HbaRule {
+func parseHostParts(parts []string) *Rule {
 
 	if parts[4] == "" {
 		if strings.Contains(parts[3], "/") {
@@ -77,7 +77,7 @@ func parseHostParts(parts []string) *HbaRule {
 
 	mask := net.IPMask(net.ParseIP(parts[4]))
 
-	return &HbaRule{
+	return &Rule{
 		Type:         parts[0],
 		DatabaseName: parts[1],
 		UserName:     parts[2],
@@ -88,11 +88,11 @@ func parseHostParts(parts []string) *HbaRule {
 	}
 }
 
-func parseHostOctet(parts []string) *HbaRule {
+func parseHostOctet(parts []string) *Rule {
 
 	addr, mask, _ := net.ParseCIDR(parts[3])
 
-	return &HbaRule{
+	return &Rule{
 		Type:         parts[0],
 		DatabaseName: parts[1],
 		UserName:     parts[2],
@@ -103,8 +103,8 @@ func parseHostOctet(parts []string) *HbaRule {
 	}
 }
 
-func parseHostDNS(parts []string) *HbaRule {
-	return &HbaRule{
+func parseHostDNS(parts []string) *Rule {
+	return &Rule{
 		Type:         parts[0],
 		DatabaseName: parts[1],
 		UserName:     parts[2],

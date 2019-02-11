@@ -6,21 +6,21 @@ import (
 )
 
 var (
-	localRule    = HbaRule{Type: "local", DatabaseName: "all", UserName: "all", AuthMethod: "trust", Comments: "comment goes here"}
+	localRule    = Rule{Type: "local", DatabaseName: "all", UserName: "all", AuthMethod: "trust", Comments: "comment goes here"}
 	localRuleStr = "local	all	all	trust	# comment goes here"
 
 	ip, netmask, _  = net.ParseCIDR("192.168.150.0/22")
-	hostRuleCIDR    = HbaRule{Type: "host", DatabaseName: "all", UserName: "all", IPAddress: ip, NetworkMask: &netmask.Mask, AuthMethod: "trust", Comments: "comment goes here"}
+	hostRuleCIDR    = Rule{Type: "host", DatabaseName: "all", UserName: "all", IPAddress: ip, NetworkMask: &netmask.Mask, AuthMethod: "trust", Comments: "comment goes here"}
 	hostRuleCIDRStr = "host	all	all	192.168.150.0/22	trust	# comment goes here"
 
-	hostRuleDNS    = HbaRule{Type: "host", DatabaseName: "all", UserName: "all", DNSAddress: "super-site.com", AuthMethod: "trust", Comments: "comment goes here"}
+	hostRuleDNS    = Rule{Type: "host", DatabaseName: "all", UserName: "all", DNSAddress: "super-site.com", AuthMethod: "trust", Comments: "comment goes here"}
 	hostRuleDNSStr = "host	all	all	super-site.com	trust	# comment goes here"
 )
 
 func Test_formatRule(t *testing.T) {
 	tests := []struct {
 		name string
-		args *HbaRule
+		args *Rule
 		want string
 	}{
 		{name: "should return empty when rule is nil", want: ""},

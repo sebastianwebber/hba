@@ -5,8 +5,8 @@ import (
 	"net"
 )
 
-// HbaRule : Details a rule from the pg_hba.conf file
-type HbaRule struct {
+// Rule : Details a rule from the pg_hba.conf file
+type Rule struct {
 	Type         string
 	DatabaseName string
 	UserName     string
@@ -18,11 +18,11 @@ type HbaRule struct {
 	Comments     string
 }
 
-func (r *HbaRule) String() string {
+func (r *Rule) String() string {
 	return formatRule(r)
 }
 
-func formatRule(rule *HbaRule) string {
+func formatRule(rule *Rule) string {
 
 	if rule == nil {
 		return ""
@@ -35,11 +35,11 @@ func formatRule(rule *HbaRule) string {
 	return formatHost(*rule)
 }
 
-func formatLocal(r HbaRule) string {
+func formatLocal(r Rule) string {
 	return fmt.Sprintf("%s\t%s\t%s\t%s\t# %s", r.Type, r.DatabaseName, r.UserName, r.AuthMethod, r.Comments)
 }
 
-func formatHost(r HbaRule) string {
+func formatHost(r Rule) string {
 
 	if r.DNSAddress != "" {
 		return fmt.Sprintf(

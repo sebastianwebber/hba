@@ -16,19 +16,19 @@ func Test_Parse(t *testing.T) {
 	tests := []struct {
 		name    string
 		args    string
-		want    HbaRule
+		want    Rule
 		wantErr bool
 	}{
 		{
 			name:    "should throw an error on invalid lines - local",
 			args:    "local#############",
-			want:    HbaRule{},
+			want:    Rule{},
 			wantErr: true,
 		},
 		{
 			name:    "should throw an error on invalid lines - host",
 			args:    "host all md4",
-			want:    HbaRule{},
+			want:    Rule{},
 			wantErr: true,
 		},
 		{
@@ -46,7 +46,7 @@ func Test_Parse(t *testing.T) {
 		{
 			name:    "should parse a host line (ip regular_mask)",
 			args:    "host    all             all             192.168.150.0 255.255.252.0            trust",
-			want:    HbaRule{Type: "host", DatabaseName: "all", UserName: "all", IPAddress: ip, NetworkMask: parseIPMask("255.255.252.0"), AuthMethod: "trust"},
+			want:    Rule{Type: "host", DatabaseName: "all", UserName: "all", IPAddress: ip, NetworkMask: parseIPMask("255.255.252.0"), AuthMethod: "trust"},
 			wantErr: false,
 		},
 		{
