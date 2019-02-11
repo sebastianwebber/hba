@@ -7,7 +7,6 @@ import (
 )
 
 func parseIPMask(s string) *net.IPMask {
-
 	mask := net.IPMask(net.ParseIP(s))
 	return &mask
 }

@@ -4,7 +4,16 @@ import (
 	"errors"
 	"fmt"
 	"net"
+	"regexp"
 	"strings"
+)
+
+const (
+	regexDBUser   = `(?P<dbname>[\w\,]+)\s+(?P<username>[\w\,]+)`
+	regexComments = `(?:(?:[ \t]+)?(?:[#]+)?(?:[ \t]+)?(?P<comment>[\w \t\:]+))`
+	regexMethod   = `(?P<method>\w+)`
+	regexHost     = `(?P<type>host(?:no)?(?:ssl)?)\s+` + regexDBUser + `\s+(?:(?P<address>[\w\.\/\:\-]+)(?:\s+(?P<mask>[\d\.]+))?)\s+` + regexMethod
+	regexLocal    = `(?P<type>local)\s+` + regexDBUser + `\s+` + regexMethod + regexComments
 )
 
 // Parse a line from pg_hba.conf file
@@ -20,13 +29,21 @@ func parseLine(line string) (*HbaRule, error) {
 	if err = validateLine(parts); err != nil {
 		return nil, fmt.Errorf("could not parse line: %v", err)
 	}
-	ruleType := strings.ToLower(parts[0])
 
-	if ruleType == "local" {
+	if strings.HasPrefix(line, "local") {
 		return parseLocal(parts), nil
 	}
 
-	return parseHost(parts), nil
+	return parseHost(line)
+}
+
+var reHost = regexp.MustCompile(regexHost)
+
+func parseHost(line string) (*HbaRule, error) {
+
+	matches := reHost.FindAllStringSubmatch(line, -1)
+
+	return parseHostParts(matches[0][1:]), nil
 }
 
 func parseLocal(parts []string) *HbaRule {
@@ -38,9 +55,9 @@ func parseLocal(parts []string) *HbaRule {
 	}
 }
 
-func parseHost(parts []string) *HbaRule {
+func parseHostParts(parts []string) *HbaRule {
 
-	if len(parts) == 5 {
+	if parts[4] == "" {
 		if strings.Contains(parts[3], "/") {
 			return parseHostOctet(parts)
 		}
@@ -70,7 +87,7 @@ func parseHostOctet(parts []string) *HbaRule {
 		UserName:     parts[2],
 		IPAddress:    addr,
 		NetworkMask:  &mask.Mask,
-		AuthMethod:   parts[4],
+		AuthMethod:   parts[5],
 	}
 }
 
@@ -80,7 +97,7 @@ func parseHostDNS(parts []string) *HbaRule {
 		DatabaseName: parts[1],
 		UserName:     parts[2],
 		DNSAddress:   parts[3],
-		AuthMethod:   parts[4],
+		AuthMethod:   parts[5],
 	}
 }
 
