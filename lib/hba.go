@@ -43,22 +43,26 @@ func formatHost(r HbaRule) string {
 
 	if r.DNSAddress != "" {
 		return fmt.Sprintf(
-			"%s\t%s\t%s\t%s\t%s",
+			"%s\t%s\t%s\t%s\t%s\t# %s",
 			r.Type,
 			r.DatabaseName,
 			r.UserName,
 			r.DNSAddress,
-			r.AuthMethod)
+			r.AuthMethod,
+			r.Comments,
+		)
 	}
 
 	octMask, _ := r.NetworkMask.Size()
 
 	return fmt.Sprintf(
-		"%s\t%s\t%s\t%s/%d\t%s",
+		"%s\t%s\t%s\t%s/%d\t%s\t# %s",
 		r.Type,
 		r.DatabaseName,
 		r.UserName,
 		r.IPAddress.String(),
 		octMask,
-		r.AuthMethod)
+		r.AuthMethod,
+		r.Comments,
+	)
 }

@@ -10,11 +10,11 @@ var (
 	localRuleStr = "local	all	all	trust"
 
 	ip, netmask, _  = net.ParseCIDR("192.168.150.0/22")
-	hostRuleCIDR    = HbaRule{Type: "host", DatabaseName: "all", UserName: "all", IPAddress: ip, NetworkMask: &netmask.Mask, AuthMethod: "trust"}
-	hostRuleCIDRStr = "host	all	all	192.168.150.0/22	trust"
+	hostRuleCIDR    = HbaRule{Type: "host", DatabaseName: "all", UserName: "all", IPAddress: ip, NetworkMask: &netmask.Mask, AuthMethod: "trust", Comments: "comment goes here"}
+	hostRuleCIDRStr = "host	all	all	192.168.150.0/22	trust	# comment goes here"
 
-	hostRuleDNS    = HbaRule{Type: "host", DatabaseName: "all", UserName: "all", DNSAddress: "super-site.com", AuthMethod: "trust"}
-	hostRuleDNSStr = "host	all	all	super-site.com	trust"
+	hostRuleDNS    = HbaRule{Type: "host", DatabaseName: "all", UserName: "all", DNSAddress: "super-site.com", AuthMethod: "trust", Comments: "comment goes here"}
+	hostRuleDNSStr = "host	all	all	super-site.com	trust	# comment goes here"
 )
 
 func Test_formatRule(t *testing.T) {

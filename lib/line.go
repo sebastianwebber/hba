@@ -10,9 +10,9 @@ import (
 
 const (
 	regexDBUser   = `(?P<dbname>[\w\,]+)\s+(?P<username>[\w\,]+)`
-	regexComments = `(?:(?:[ \t]+)?(?:[#]+)?(?:[ \t]+)?(?P<comment>[\w \t\:]+))`
+	regexComments = `(?:(?:[ \t]+)?(?:[#]+)?(?:[ \t]+)?(?P<comment>[\w \t\:]+))?`
 	regexMethod   = `(?P<method>\w+)`
-	regexHost     = `(?P<type>host(?:no)?(?:ssl)?)\s+` + regexDBUser + `\s+(?:(?P<address>[\w\.\/\:\-]+)(?:\s+(?P<mask>[\d\.]+))?)\s+` + regexMethod
+	regexHost     = `(?P<type>host(?:no)?(?:ssl)?)\s+` + regexDBUser + `\s+(?:(?P<address>[\w\.\/\:\-]+)(?:\s+(?P<mask>[\d\.]+))?)\s+` + regexMethod + regexComments
 	regexLocal    = `(?P<type>local)\s+` + regexDBUser + `\s+` + regexMethod + regexComments
 )
 
@@ -74,6 +74,7 @@ func parseHostParts(parts []string) *HbaRule {
 		IPAddress:    net.ParseIP(parts[3]),
 		NetworkMask:  &mask,
 		AuthMethod:   parts[5],
+		Comments:     parts[6],
 	}
 }
 
@@ -88,6 +89,7 @@ func parseHostOctet(parts []string) *HbaRule {
 		IPAddress:    addr,
 		NetworkMask:  &mask.Mask,
 		AuthMethod:   parts[5],
+		Comments:     parts[6],
 	}
 }
 
@@ -98,6 +100,7 @@ func parseHostDNS(parts []string) *HbaRule {
 		UserName:     parts[2],
 		DNSAddress:   parts[3],
 		AuthMethod:   parts[5],
+		Comments:     parts[6],
 	}
 }
 
