@@ -36,7 +36,7 @@ func formatRule(rule *HbaRule) string {
 }
 
 func formatLocal(r HbaRule) string {
-	return fmt.Sprintf("%s\t%s\t%s\t%s", r.Type, r.DatabaseName, r.UserName, r.AuthMethod)
+	return fmt.Sprintf("%s\t%s\t%s\t%s\t# %s", r.Type, r.DatabaseName, r.UserName, r.AuthMethod, r.Comments)
 }
 
 func formatHost(r HbaRule) string {

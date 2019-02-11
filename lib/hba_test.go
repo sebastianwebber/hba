@@ -6,8 +6,8 @@ import (
 )
 
 var (
-	localRule    = HbaRule{Type: "local", DatabaseName: "all", UserName: "all", AuthMethod: "trust"}
-	localRuleStr = "local	all	all	trust"
+	localRule    = HbaRule{Type: "local", DatabaseName: "all", UserName: "all", AuthMethod: "trust", Comments: "comment goes here"}
+	localRuleStr = "local	all	all	trust	# comment goes here"
 
 	ip, netmask, _  = net.ParseCIDR("192.168.150.0/22")
 	hostRuleCIDR    = HbaRule{Type: "host", DatabaseName: "all", UserName: "all", IPAddress: ip, NetworkMask: &netmask.Mask, AuthMethod: "trust", Comments: "comment goes here"}

@@ -31,10 +31,19 @@ func parseLine(line string) (*HbaRule, error) {
 	}
 
 	if strings.HasPrefix(line, "local") {
-		return parseLocal(parts), nil
+		return parseLocal(line)
 	}
 
 	return parseHost(line)
+}
+
+var reLocal = regexp.MustCompile(regexLocal)
+
+func parseLocal(line string) (*HbaRule, error) {
+
+	matches := reLocal.FindAllStringSubmatch(line, -1)
+
+	return parseLocalParts(matches[0][1:]), nil
 }
 
 var reHost = regexp.MustCompile(regexHost)
@@ -46,12 +55,13 @@ func parseHost(line string) (*HbaRule, error) {
 	return parseHostParts(matches[0][1:]), nil
 }
 
-func parseLocal(parts []string) *HbaRule {
+func parseLocalParts(parts []string) *HbaRule {
 	return &HbaRule{
 		Type:         parts[0],
 		DatabaseName: parts[1],
 		UserName:     parts[2],
 		AuthMethod:   parts[3],
+		Comments:     parts[4],
 	}
 }
 
