@@ -82,20 +82,6 @@ func showRules() {
 
 }
 
-func prettyAddress(r hba.Rule) string {
-	if r.DNSAddress != "" {
-		return r.DNSAddress
-	}
-
-	if r.NetworkMask == nil {
-		return ""
-	}
-
-	octMask, _ := r.NetworkMask.Size()
-	return fmt.Sprintf("%s/%d", r.IPAddress.String(), octMask)
-
-}
-
 func showHelp() {
 	fmt.Println("You are using hba, an experimental command-line interface to pg_hba.conf file.")
 	fmt.Println("type:")
