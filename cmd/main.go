@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/sebastianwebber/hba/cmd/ui"
 
@@ -23,6 +24,7 @@ var (
 	}
 
 	histCommands []string
+	fileRules    *[]hba.Rule
 )
 
 func init() {
@@ -41,6 +43,7 @@ func completer(d prompt.Document) []prompt.Suggest {
 
 func main() {
 	fmt.Printf("hba version %s\n", version)
+	loadFile()
 	fmt.Println(`Type "help" for help.`)
 	for {
 		t := prompt.Input(fmt.Sprintf("%s#= ", hbaFile), completer,
@@ -50,20 +53,40 @@ func main() {
 			prompt.OptionSelectedSuggestionBGColor(prompt.LightGray),
 			prompt.OptionSuggestionBGColor(prompt.DarkGray))
 
-		switch t {
-		case "show":
-			showRules()
-		case "help":
-			showHelp()
-		case "quit":
-			os.Exit(0)
-		}
-
-		histCommands = append(histCommands, t)
+		routeCmd(t)
 	}
 }
 
-func showRules() {
+func routeCmd(cmd string) {
+	defer func() {
+		histCommands = append(histCommands, cmd)
+	}()
+
+	if strings.HasPrefix(cmd, "show") {
+		parts := strings.Fields(cmd)
+
+		if len(parts) == 1 {
+			showRules(*fileRules)
+			return
+		}
+
+		showRules(
+			ui.Filter(
+				*fileRules,
+				parts[1]))
+		return
+	}
+
+	if cmd == "help" {
+		showHelp()
+		return
+	}
+
+	os.Exit(0)
+}
+
+func loadFile() {
+	var err error
 
 	file, err := os.Open(hbaFile)
 	defer file.Close()
@@ -72,14 +95,18 @@ func showRules() {
 		log.Fatalf("could not open file: %v", file)
 	}
 
-	all, err := hba.ParseReader(file)
+	fileRules, err = hba.ParseReader(file)
 
 	if err != nil {
 		log.Fatalf("could not parse file: %v", file)
 	}
 
-	ui.DisplayRules(*all, os.Stdout)
+	fmt.Printf("Loaded rules from '%s' file.\n", hbaFile)
 
+}
+
+func showRules(rules []hba.Rule) {
+	ui.DisplayRules(rules, os.Stdout)
 }
 
 func showHelp() {
