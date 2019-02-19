@@ -23,14 +23,14 @@ var (
 	ip, netmask, _ = net.ParseCIDR("192.168.150.0/22")
 	hostRuleCIDR   = hba.Rule{Type: "host", DatabaseName: "all", UserName: "all", IPAddress: ip, NetworkMask: &netmask.Mask, AuthMethod: "trust", Comments: "comment goes here"}
 
-	hostRuleDNS = hba.Rule{Type: "host", DatabaseName: "all", UserName: "all", DNSAddress: "super-site.com", AuthMethod: "trust", Comments: "comment goes here"}
+	hostRuleDNS = hba.Rule{Type: "host", DatabaseName: "all", UserName: "all", DNSAddress: "super-site.com", AuthMethod: "md5", Comments: "comment goes here"}
 
 	hostRuleStr = `
 +------+----------+------+------------------+--------+-------------------+
 | TYPE | DATABASE | USER |    ADDRESSES     | METHOD |     COMMENTS      |
 +------+----------+------+------------------+--------+-------------------+
 | host | all      | all  | 192.168.150.0/22 | trust  | comment goes here |
-| host | all      | all  | super-site.com   | trust  | comment goes here |
+| host | all      | all  | super-site.com   | md5    | comment goes here |
 +------+----------+------+------------------+--------+-------------------+
 `
 	hostAllStr = `
@@ -39,7 +39,7 @@ var (
 +-------+----------+------+------------------+--------+-------------------+
 | local | all      | all  |                  | trust  | comment goes here |
 | host  | all      | all  | 192.168.150.0/22 | trust  | comment goes here |
-| host  | all      | all  | super-site.com   | trust  | comment goes here |
+| host  | all      | all  | super-site.com   | md5    | comment goes here |
 +-------+----------+------+------------------+--------+-------------------+
 `
 )
