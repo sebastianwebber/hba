@@ -2,9 +2,10 @@ package hba
 
 import (
 	"io"
-	"reflect"
 	"strings"
 	"testing"
+
+	messagediff "gopkg.in/d4l3k/messagediff.v1"
 )
 
 func makeFile(coments bool, validLocal bool, validCIDR bool, validDNS bool, invalid bool) io.Reader {
@@ -40,20 +41,32 @@ func makeFile(coments bool, validLocal bool, validCIDR bool, validDNS bool, inva
 func makeRules(validLocal, validCIDR, validDNS bool) *[]Rule {
 
 	out := []Rule{}
+	const comentsTotal = 4
 
 	if validLocal {
 		out = append(out, localRule)
+		out[0].LineNumber = 1 + comentsTotal
 	}
 
 	if validCIDR {
 		out = append(out, hostRuleCIDR)
+		out[1].LineNumber = 2 + comentsTotal
 	}
 
 	if validDNS {
 		out = append(out, hostRuleDNS)
+		out[2].LineNumber = 3 + comentsTotal
 	}
 
 	return &out
+}
+
+func compare(t *testing.T, generated interface{}, expected interface{}) {
+	if diff, equal := messagediff.PrettyDiff(generated, expected); !equal {
+		t.Errorf("Generated = %#v", generated)
+		t.Errorf("Expected = %#v\n", expected)
+		t.Errorf("Diff = %s", diff)
+	}
 }
 
 func TestParseReader(t *testing.T) {
@@ -76,9 +89,7 @@ func TestParseReader(t *testing.T) {
 				t.Errorf("ParseReader() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ParseReader() = %v, want %v", got, tt.want)
-			}
+			compare(t, got, tt.want)
 		})
 	}
 }

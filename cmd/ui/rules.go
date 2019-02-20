@@ -27,11 +27,12 @@ func DisplayRules(in []hba.Rule, out io.Writer) {
 func renderTable(in []hba.Rule, out io.Writer) {
 
 	table := tablewriter.NewWriter(out)
-	table.SetHeader([]string{"Type", "Database", "User", "addresses", "method", "comments"})
+	table.SetHeader([]string{"Line", "Type", "Database", "User", "addresses", "method", "comments"})
 
 	for _, v := range in {
 		table.Append(
 			[]string{
+				fmt.Sprintf("%d", v.LineNumber),
 				v.Type,
 				v.DatabaseName,
 				v.UserName,

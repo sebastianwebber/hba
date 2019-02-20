@@ -23,7 +23,10 @@ func parseReader(buf io.Reader) (*[]Rule, error) {
 	scanner.Split(bufio.ScanLines)
 
 	var out []Rule
+
+	lineNo := 0
 	for scanner.Scan() {
+		lineNo++
 
 		currentLine := strings.Trim(scanner.Text(), " ")
 
@@ -36,6 +39,8 @@ func parseReader(buf io.Reader) (*[]Rule, error) {
 		if err != nil {
 			return nil, fmt.Errorf("could not parse line: %v", err)
 		}
+
+		newRule.LineNumber = lineNo
 
 		out = append(out, *newRule)
 	}
