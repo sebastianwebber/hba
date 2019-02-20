@@ -41,6 +41,10 @@ func renderTable(in []hba.Rule, out io.Writer) {
 				v.Comments,
 			})
 	}
+
+	table.SetBorder(false)
+	table.SetCaption(true, fmt.Sprintf("(%d rows)", len(in)))
+
 	table.Render()
 }
 

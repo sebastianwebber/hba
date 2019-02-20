@@ -13,11 +13,10 @@ import (
 var (
 	localRule    = hba.Rule{LineNumber: 1, Type: "local", DatabaseName: "all", UserName: "all", AuthMethod: "trust", Comments: "comment goes here"}
 	localRuleStr = `
+  LINE | TYPE  | DATABASE | USER | ADDRESSES | METHOD |     COMMENTS       
 +------+-------+----------+------+-----------+--------+-------------------+
-| LINE | TYPE  | DATABASE | USER | ADDRESSES | METHOD |     COMMENTS      |
-+------+-------+----------+------+-----------+--------+-------------------+
-|    1 | local | all      | all  |           | trust  | comment goes here |
-+------+-------+----------+------+-----------+--------+-------------------+
+     1 | local | all      | all  |           | trust  | comment goes here  
+(1 rows)
 `
 
 	ip, netmask, _ = net.ParseCIDR("192.168.150.0/22")
@@ -26,21 +25,19 @@ var (
 	hostRuleDNS = hba.Rule{LineNumber: 3, Type: "host", DatabaseName: "all", UserName: "all", DNSAddress: "super-site.com", AuthMethod: "md5", Comments: "comment goes here"}
 
 	hostRuleStr = `
+  LINE | TYPE | DATABASE | USER |    ADDRESSES     | METHOD |     COMMENTS       
 +------+------+----------+------+------------------+--------+-------------------+
-| LINE | TYPE | DATABASE | USER |    ADDRESSES     | METHOD |     COMMENTS      |
-+------+------+----------+------+------------------+--------+-------------------+
-|    2 | host | all      | all  | 192.168.150.0/22 | trust  | comment goes here |
-|    3 | host | all      | all  | super-site.com   | md5    | comment goes here |
-+------+------+----------+------+------------------+--------+-------------------+
+     2 | host | all      | all  | 192.168.150.0/22 | trust  | comment goes here  
+     3 | host | all      | all  | super-site.com   | md5    | comment goes here  
+(2 rows)
 `
 	hostAllStr = `
+  LINE | TYPE  | DATABASE | USER |    ADDRESSES     | METHOD |     COMMENTS       
 +------+-------+----------+------+------------------+--------+-------------------+
-| LINE | TYPE  | DATABASE | USER |    ADDRESSES     | METHOD |     COMMENTS      |
-+------+-------+----------+------+------------------+--------+-------------------+
-|    1 | local | all      | all  |                  | trust  | comment goes here |
-|    2 | host  | all      | all  | 192.168.150.0/22 | trust  | comment goes here |
-|    3 | host  | all      | all  | super-site.com   | md5    | comment goes here |
-+------+-------+----------+------+------------------+--------+-------------------+
+     1 | local | all      | all  |                  | trust  | comment goes here  
+     2 | host  | all      | all  | 192.168.150.0/22 | trust  | comment goes here  
+     3 | host  | all      | all  | super-site.com   | md5    | comment goes here  
+(3 rows)
 `
 )
 
