@@ -53,6 +53,9 @@ func main() {
 		prompt.OptionPrefix(fmt.Sprintf("%s#= ", hbaFile)),
 		prompt.OptionPrefixTextColor(prompt.Yellow),
 		prompt.OptionHistory(histCommands),
+
+		prompt.OptionSelectedSuggestionBGColor(prompt.LightGray),
+		prompt.OptionSuggestionBGColor(prompt.DarkGray),
 	)
 	p.Run()
 
