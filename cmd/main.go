@@ -45,19 +45,20 @@ func main() {
 	fmt.Printf("hba version %s\n", version)
 	loadFile()
 	fmt.Println(`Type "help" for help.`)
-	for {
-		t := prompt.Input(fmt.Sprintf("%s#= ", hbaFile), completer,
-			prompt.OptionTitle("sql-prompt"),
-			prompt.OptionHistory(histCommands),
-			prompt.OptionPrefixTextColor(prompt.Yellow),
-			prompt.OptionSelectedSuggestionBGColor(prompt.LightGray),
-			prompt.OptionSuggestionBGColor(prompt.DarkGray))
 
-		routeCmd(t)
-	}
+	p := prompt.New(
+		executer,
+		completer,
+		prompt.OptionTitle("kube-prompt: interactive kubernetes client"),
+		prompt.OptionPrefix(fmt.Sprintf("%s#= ", hbaFile)),
+		prompt.OptionPrefixTextColor(prompt.Yellow),
+		prompt.OptionHistory(histCommands),
+	)
+	p.Run()
+
 }
 
-func routeCmd(cmd string) {
+func executer(cmd string) {
 	defer func() {
 		histCommands = append(histCommands, cmd)
 	}()
@@ -82,7 +83,11 @@ func routeCmd(cmd string) {
 		return
 	}
 
-	os.Exit(0)
+	if cmd == "quit" || cmd == "q" {
+		os.Exit(0)
+	}
+
+	return
 }
 
 func loadFile() {
