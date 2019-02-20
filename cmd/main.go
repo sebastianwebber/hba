@@ -71,7 +71,7 @@ func routeCmd(cmd string) {
 		}
 
 		showRules(
-			ui.Filter(
+			hba.Filter(
 				*fileRules,
 				parts[1]))
 		return

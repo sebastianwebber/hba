@@ -1,22 +1,20 @@
-package ui
+package hba
 
 import (
 	"reflect"
 	"testing"
-
-	"github.com/sebastianwebber/hba"
 )
 
 var (
-	allRows = []hba.Rule{
+	allRows = []Rule{
 		localRule,
 		hostRuleCIDR,
 		hostRuleDNS,
 	}
 )
 
-func makeRows(local, host, md5Only bool) []hba.Rule {
-	var out []hba.Rule
+func makeRows(local, host, md5Only bool) []Rule {
+	var out []Rule
 
 	if local {
 		out = append(out, localRule)
@@ -35,13 +33,13 @@ func makeRows(local, host, md5Only bool) []hba.Rule {
 
 func TestFilter(t *testing.T) {
 	type args struct {
-		rules  []hba.Rule
+		rules  []Rule
 		filter string
 	}
 	tests := []struct {
 		name string
 		args args
-		want []hba.Rule
+		want []Rule
 	}{
 		{name: "should ignore empty filter", want: allRows, args: args{rules: allRows, filter: ""}},
 		{name: "should bring only local rows", want: makeRows(true, false, false), args: args{rules: allRows, filter: "local"}},

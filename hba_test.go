@@ -13,8 +13,8 @@ var (
 	hostRuleCIDR    = Rule{Type: "host", DatabaseName: "all", UserName: "all", IPAddress: ip, NetworkMask: &netmask.Mask, AuthMethod: "trust", Comments: "comment goes here"}
 	hostRuleCIDRStr = "host	all	all	192.168.150.0/22	trust	# comment goes here"
 
-	hostRuleDNS    = Rule{Type: "host", DatabaseName: "all", UserName: "all", DNSAddress: "super-site.com", AuthMethod: "trust", Comments: "comment goes here"}
-	hostRuleDNSStr = "host	all	all	super-site.com	trust	# comment goes here"
+	hostRuleDNS    = Rule{Type: "host", DatabaseName: "all", UserName: "all", DNSAddress: "super-site.com", AuthMethod: "md5", Comments: "comment goes here"}
+	hostRuleDNSStr = "host	all	all	super-site.com	md5	# comment goes here"
 )
 
 func Test_formatRule(t *testing.T) {

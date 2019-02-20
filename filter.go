@@ -1,19 +1,17 @@
-package ui
+package hba
 
 import (
 	"strings"
-
-	"github.com/sebastianwebber/hba"
 )
 
-// Filter creates a new collection of []hba.Rule based on the input string
-func Filter(rules []hba.Rule, filter string) []hba.Rule {
+// Filter creates a new collection of []Rule based on the input string
+func Filter(rules []Rule, filter string) []Rule {
 
 	if filter == "" {
 		return rules
 	}
 
-	var out []hba.Rule
+	var out []Rule
 
 	for i := 0; i < len(rules); i++ {
 		ruleStr := rules[i].String()
